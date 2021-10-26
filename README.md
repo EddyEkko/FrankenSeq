@@ -4,7 +4,7 @@ FrankenSeq is a comprehensive and modular analysis platform for the clustering o
 
 FrankenSeq accepts either SingleCellExperiment or Seurat objects as RDS files, or a Gene x Cell matrix CSV file as input.
 
-FrankenSeq is composed of six tabs - ‘Quality Control’, ‘Feature Selection’,  ‘Dimension Reduction’, ‘Cluster Validation’, ‘Unsupervised Learning’ and ‘Download Data’.
+FrankenSeq is composed of six tabs - ‘Quality Control’, ‘Feature Selection’,  ‘Dimension Reduction’, ‘Cluster Validation’, ‘Cluster Analysis’ and ‘Download Data’.
 
 These tabs are intended to be used in sequence, with each accepting as input the output of the tab before it. The output of the first five tabs is a Seurat object containing 
 the combined results of the analysis so far. The output of ‘Download Data’ is a CSV file containing either a summary of the final cluster assignments, the full cluster 
