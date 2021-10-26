@@ -15,4 +15,4 @@ assignments, or the specific genes selected by the chosen feature selection algo
  
  The exception here is ‘Cluster Validation’ - this tab is optional. It can be skipped, and alterations made to its parameters do not impact downstream analysis.
 
-
+![](PipelineFlowChart.jpg)
