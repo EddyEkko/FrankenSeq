@@ -1,4 +1,13 @@
+
 #Package Installation:
+
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+
+
+if (!requireNamespace("remotes", quietly = TRUE))
+  install.packages("remotes")
+
 
 #General Framework
 install.packages("shiny")
@@ -6,17 +15,20 @@ install.packages("Seurat")
 install.packages("shinythemes")
 install.packages("shinycssloaders")
 install.packages("magrittr")
-install.packages("SingleCellExperiment")
+
+BiocManager::install("SingleCellExperiment")
 
 #For Feature Selection
 install.packages("DUBStepR")
-install.packages("M3Drop")
+
+BiocManager::install("M3Drop")
 
 #For Dimension Reduction
-
 install.packages("VGAM")
-install.packages("SeuratWrappers")
-install.packages("scry")
+
+remotes::install_github('satijalab/seurat-wrappers')
+
+BiocManager::install("scry")
 
 #For Cluster Validation
 install.packages("NbClust")
@@ -24,9 +36,11 @@ install.packages("ggplot2")
 install.packages("factoextra")
 
 #For Cluster Analysis
-install.packages("HGC")
-install.packages("monocle")
-install.packages("SC3")
+BiocManager::install("HGC")
+BiocManager::install("monocle")
+BiocManager::install("SC3")
+
 install.packages("scDHA")
-install.packages("bluster")
+
+BiocManager::install("bluster")
 install.packages("dynamicTreeCut")
