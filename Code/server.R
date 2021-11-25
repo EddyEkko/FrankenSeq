@@ -373,4 +373,51 @@ server = function(input,output) {
     }
   )
   
+  output$SOdlb <- downloadHandler(
+    
+    filename = "FinalSeuratObject.txt",
+    
+    contentType = "RDS",
+    
+    content = function(file) {
+      
+      saveRDS(Clustered_Data(), file)
+    }
+  )
+  
+  #Differentially Expressed Gene Analysis
+  
+  output$degPlot = renderPlot({
+    
+    sO = Clustered_Data()
+    
+    lfc = input$LFC
+    
+    minpct = input$minPC
+    
+    sO.markers <- FindAllMarkers(sO, only.pos = TRUE, min.pct = minpct, logfc.threshold = lfc)
+    
+    sO.markers %>% group_by(cluster) %>% top_n(n = 2, wt = avg_log2FC) -> top10
+    
+    degHeatMap = DoHeatmap(sO, features = top10$gene) + NoLegend()
+    
+    return(degHeatMap)
+    
+  })
+  
+  output$degTable = renderTable({
+    
+    sO = Clustered_Data()
+    
+    lfc = input$LFC
+    
+    minpct = input$minPC
+    
+    sO.markers <- FindAllMarkers(sO, only.pos = TRUE, min.pct = minpct, logfc.threshold = lfc)
+    
+    DEG_Table = sO.markers %>% group_by(cluster) %>% slice_max(n = 2, order_by = avg_log2FC)
+    
+    return(DEG_Table)
+    
+  })
 }
