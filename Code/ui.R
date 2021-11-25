@@ -2,7 +2,7 @@ library(shinythemes)
 library(shinycssloaders)
 library(magrittr)
 
-ui = fluidPage(theme = shinytheme("spacelab"), #spacelab or paper
+ui = fluidPage(theme = shinytheme("spacelab"), 
                navbarPage(
                  "FrankenSeq",
                  
@@ -10,7 +10,7 @@ ui = fluidPage(theme = shinytheme("spacelab"), #spacelab or paper
                           
                           sidebarPanel(
                             
-                            selectInput(inputId = "FileType", label = "Select Input File Type", choices = c("RDS (Existing Seurat Object)", "CSV (Gene x Cell Table)", "SingleCellExperiment Object (RDS)"), selected = "RDS (Existing Seurat Object)"),
+                            selectInput(inputId = "FileType", label = "Select Input File Type", choices = c("RDS (Existing Seurat Object)", "CSV (Gene x Cell Table)", "SingleCellExperiment Object (RDS)", "Read Count Data (CSV)"), selected = "RDS (Existing Seurat Object)"),
             
                             fileInput(inputId = "rdata", label = "Select an input file", accept = ".rds", buttonLabel = "Browse...", placeholder = "No file selected..."),
                             
@@ -19,9 +19,9 @@ ui = fluidPage(theme = shinytheme("spacelab"), #spacelab or paper
                             #Conditional Panel
                             conditionalPanel(
                               condition = "input.DPOptions == 'Data Filtration'",
-                              numericInput(inputId = "Max_Features", label = "Maximum Number of Features", max = 5000, min = 1, value = 3000),
-                              numericInput(inputId = "Min_Features", label = " Minimum Number of Features", max = 5000, min = 1, value = 200),
-                              numericInput(inputId = "Mitochondria", label = " Max % Mitochondrial DNA", max = 100, min = 1, value = 5),
+                              numericInput(inputId = "Max_Features", label = "Maximum Number of Features", max = 5000, min = 1, value = 3000, step = 1),
+                              numericInput(inputId = "Min_Features", label = " Minimum Number of Features", max = 5000, min = 1, value = 200, step = 1),
+                              numericInput(inputId = "Mitochondria", label = " Max % Mitochondrial DNA", max = 100, min = 1, value = 5, step = 1),
                             ),
                             
                           ),
@@ -40,7 +40,7 @@ ui = fluidPage(theme = shinytheme("spacelab"), #spacelab or paper
                             #conditional Feature Selection Panels
                             conditionalPanel(
                               condition = "input.FS == 'HVG - Seurat (vst)' || input.FS == 'HVG - Seurat (Dispersion)' || input.FS == 'Feature Selection by Deviance (Scry)' || input.FS == 'Filter by Gene Expression' || input.FS == 'Drop-Out Based Feature Selection - M3Drop'",
-                              numericInput("nFeatures", "Number of Top Features", min = 1, value = 1556)
+                              numericInput("nFeatures", "Number of Top Features", min = 1, value = 1556, step = 1)
                               
                             ),
                           
@@ -61,7 +61,7 @@ ui = fluidPage(theme = shinytheme("spacelab"), #spacelab or paper
                             conditionalPanel(
                               condition = "input.dr == 'GLM PCA'",
                               
-                              numericInput("L_value", "Choose the number of dimensions to return: ", min = 2, value = 10),
+                              numericInput("L_value", "Choose the number of dimensions to return: ", min = 2, value = 10, step = 1),
                               
                             ),
                             
@@ -81,13 +81,14 @@ ui = fluidPage(theme = shinytheme("spacelab"), #spacelab or paper
                             
                  ),
                  
+                
                  tabPanel("Cluster Validation", #Dimension Reduction Tab
                           
                           sidebarPanel(
                             
                             radioButtons(inputId = "CVOptions", label = "Select a Plot", choices = c("Estimate K with SC3","Elbow Plot", "Silhouette Plot")),
                             
-                            numericInput(inputId = "maxK", label = "Select maxinum number of clusters to evaluate;", value = 15 )
+                            numericInput(inputId = "maxK", label = "Select maxinum number of clusters to evaluate;", value = 15, step = 1)
                             
                           ),
                           
@@ -100,6 +101,8 @@ ui = fluidPage(theme = shinytheme("spacelab"), #spacelab or paper
                           ),
                           
                  ),
+                 
+                 
                           
                 tabPanel("Cluster Analysis", #Cluster Analysis Tab
                                    
@@ -107,7 +110,7 @@ ui = fluidPage(theme = shinytheme("spacelab"), #spacelab or paper
                                      
                                      selectInput(inputId = "CM", label = "Choose an Unsupervised Clustering Algorithm", choices = c("K-Nearest Neighbor (Seurat)", "Graph Based Hierarchical Clustering (HGC)", "Hierarchical Clustering", "K-means Clustering", "Density Peak Clustering (Monocle)", "Consensus Clustering (SC3)", "Hierarchical AutoEncoder")),
                                      
-                                     numericInput(inputId = "dimensions", label = "Dimensionality: ", value = 10, max = 30, min = 2),
+                                     numericInput(inputId = "dimensions", label = "Dimensionality: ", value = 10, max = 30, min = 2, step = 1),
                                      
                                     #Conditional Panels
   
@@ -115,7 +118,7 @@ ui = fluidPage(theme = shinytheme("spacelab"), #spacelab or paper
                                        
                                        condition = "input.CM == 'K-Nearest Neighbor (Seurat)'",
                                       
-                                       numericInput(inputId = "resolution", label = "Resolution Parameter", value = 0.5, max = 1.5),
+                                       numericInput(inputId = "resolution", label = "Resolution Parameter", value = 0.5, max = 1.5, step = 0.05),
                                      ),
                                     
                                      
@@ -123,7 +126,7 @@ ui = fluidPage(theme = shinytheme("spacelab"), #spacelab or paper
                                        
                                        condition = "input.CM == 'Graph Based Hierarchical Clustering (HGC)' || input.CM == 'K-means Clustering' || input.CM == 'Consensus Clustering (SC3)' || input.CM == 'Density Peak Clustering (Monocle)' || input.CM == 'Hierarchical Clustering' || input.CM == 'Hierarchical AutoEncoder'",
                                        
-                                       numericInput(inputId = "k_value", label = "Desired Number of Clusters", value = 4, min = 1),
+                                       numericInput(inputId = "k_value", label = "Desired Number of Clusters", value = 4, min = 1, step = 1),
                                       
                                        
                                      ),
@@ -142,7 +145,7 @@ ui = fluidPage(theme = shinytheme("spacelab"), #spacelab or paper
                                       
                                       condition = "input.CM == 'Hierarchical AutoEncoder'",
                                       
-                                      numericInput(inputId = "ncore", label = "Choose the number of cores to use in the analysis", value = 4, min = 1),
+                                      numericInput(inputId = "ncore", label = "Choose the number of cores to use in the analysis", value = 4, min = 1, step = 1),
                                      
                                       #radioButtons(inputId = "DLoptions", label = "Select a Feature Selection Method", choices = c("Use scDHA gene filtering","Use current feature selection algorithm")), 
                                       
@@ -157,8 +160,6 @@ ui = fluidPage(theme = shinytheme("spacelab"), #spacelab or paper
                                    
                                    mainPanel(
                                      
-                                     
-        
                                        selectInput(inputId = "cv", label = "T-SNE, UMAP or PCA Cluster Visualization", choices = c("umap", "tsne"), selected = "umap"),
                                      
                                      
@@ -166,7 +167,7 @@ ui = fluidPage(theme = shinytheme("spacelab"), #spacelab or paper
                                    ),
                           ),
                 
-                tabPanel("Download Data", #Dimension Reduction Tab
+                tabPanel("Cluster Data", #Clustering Results Tab
                          
                          sidebarPanel(
                            
@@ -176,15 +177,52 @@ ui = fluidPage(theme = shinytheme("spacelab"), #spacelab or paper
                            htmlOutput("Pipeline"),
                            
                            helpText("Click here to download the Table as a CSV"),
-                           downloadButton("dlb", "Download Data"),
+                           downloadButton("dlb", "Download Table"),
                            
                            helpText("Click here to download a List of the Current Selected Features"),
                            downloadButton("FSdlb", "Download Features"),
+                           
+                           helpText("Click here to download the Current Seurat Object as an RDS"),
+                           downloadButton("SOdlb", "Download Seurat Object"),
                          ),
                          
                          mainPanel(
                            
                            tableOutput("table"),
+                         ),
+                         
+                ),
+                
+                tabPanel("DEG Analysis", #Dimension Reduction Tab
+                         
+                         sidebarPanel(
+                           
+                           radioButtons(inputId = "DEG_Options", label = "Select an Option", choices = c("Heatmap","Table")),
+                          
+                           numericInput(inputId = "LFC", label = "Select a Log Fold Change Threshold;", value = 0.25, step = 0.05), 
+    
+                           numericInput(inputId = "minPC", label = "Select a minimum percent expression value; ", value = 0.25, step = 0.05)
+                           
+                         ),
+                         
+                         mainPanel(
+                           
+                           conditionalPanel(
+                             
+                             condition = "input.DEG_Options == 'Heatmap'",
+                             
+                             plotOutput('degPlot', width = "100%") %>% withSpinner(color="#0dc5c1", hide.ui = FALSE),
+                             
+                           ),
+                           
+                           conditionalPanel(
+                             
+                             condition = "input.DEG_Options == 'Table'",
+                             
+                             tableOutput('degTable') %>% withSpinner(color="#0dc5c1", hide.ui = FALSE),
+                             
+                           ),
+                           
                          ),
                          
                 )
